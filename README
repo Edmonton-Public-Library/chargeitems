@@ -2,9 +2,11 @@
 
 Project Notes
 -------------
+This script does one thing; it charges items to a user. This is not necessarily a good thing
+so you must make sure that all the items you select must not already be charged to a user already.
 
 Instructions for Running:
-./chargeitems
+./chargeitems [switches]
 
 Product Description:
 Perl script written by Andrew Nisbet for Edmonton Public Library, distributable by the enclosed license.

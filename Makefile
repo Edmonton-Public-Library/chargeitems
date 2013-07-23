@@ -25,8 +25,8 @@
 #      0.0 - Dev. 
 ####################################################
 # Change comment below for appropriate server.
-#SERVER=eplapp.library.ualberta.ca
-SERVER=edpl-t.library.ualberta.ca
+SERVER=eplapp.library.ualberta.ca
+# SERVER=edpl-t.library.ualberta.ca
 USER=sirsi
 REMOTE=~/Unicorn/EPLwork/anisbet/
 LOCAL=~/projects/chargeitems/

@@ -122,8 +122,8 @@ sub init
 	$STATION = $opt{'s'} if ( $opt{'s'} );
 	if ( $opt{'o'} )
 	{
-		$TRANSACTION_FILE = $opt{'o'}."lst";
-		$RESPONSE_FILE    = $opt{'o'}."log";
+		$TRANSACTION_FILE = $opt{'o'}.".lst";
+		$RESPONSE_FILE    = $opt{'o'}.".log";
 	}
 }
 

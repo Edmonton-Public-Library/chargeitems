@@ -28,7 +28,7 @@
 SERVER=eplapp.library.ualberta.ca
 # SERVER=edpl-t.library.ualberta.ca
 USER=sirsi
-REMOTE=~/Unicorn/EPLwork/anisbet/
+REMOTE=~/Unicorn/Bincustom/
 LOCAL=~/projects/chargeitems/
 
 put: test

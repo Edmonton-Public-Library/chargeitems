@@ -15,7 +15,10 @@ Repository Information:
 This product is under version control using Git.
 
 Dependencies:
-None
+Requires: file structured as so:
+'1100056|2|4|31221106795649  |VIDEO GAME 793.932  ANA|'
+Which can be derived from barcodes with 
+cat lcp_to_missing.lst | selitem -iB -oIB | selcallnum -iK -oKSA
 
 Known Issues:
 None

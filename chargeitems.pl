@@ -35,6 +35,8 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Jul 23 11:58:59 MDT 2013
 # Rev: 
+#          0.1 - Add switch to specify what to call, and where to  put the 
+#                output files. 
 #          0.0 - Dev. 
 #
 ####################################################
@@ -63,7 +65,7 @@ sub trim($)
 	return $string;
 }
 
-my $VERSION    = qq{0.0};
+my $VERSION    = qq{0.1};
 my $USER_ID    = "";
 my $TRX_NUM    = 1;
 my $API_LN_COUNT = 0;
@@ -82,11 +84,13 @@ sub usage()
 {
     print STDERR << "EOF";
 
-	usage: $0 [-u LCP-MISSING]
+	usage: $0 [-u LCP-MISSING] [-o"./foo/bar/charge_items"] [-s'station'] [-Ux]
 Usage notes for chargeitems.pl. $0 takes a list of barcodes
 on the command line and creates and runs API server commands
 to charge them to a given user, or system card.
 
+ -o PATH   : File name of the output files '[TRX|TRSP]_charge_item.[log|lst] by default.
+             'lst' file includes the transaction requests, 'log' includes transaction responses.
  -s STATION: Station library who performed this transaction (default EPLMNA).
  -u USERID : Mandatory, user id who will be charged.
  -U        : Update, run the API server commands, otherwise it just produces the commands.
@@ -104,7 +108,7 @@ EOF
 # return: 
 sub init
 {
-    my $opt_string = 's:u:Ux';
+    my $opt_string = 'o:s:u:Ux';
     getopts( "$opt_string", \%opt ) or usage();
     usage() if ( $opt{'x'} );
 	if ( !$opt{'u'} )
@@ -116,6 +120,11 @@ sub init
 		$USER_ID = $opt{'u'} if ( $opt{'u'} );
 	}
 	$STATION = $opt{'s'} if ( $opt{'s'} );
+	if ( $opt{'o'} )
+	{
+		$TRANSACTION_FILE = $opt{'o'}."lst";
+		$RESPONSE_FILE    = $opt{'o'}."log";
+	}
 }
 
 

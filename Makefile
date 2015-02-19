@@ -2,7 +2,7 @@
 # Makefile for project chargeitems 
 # Created: Tue Jul 23 11:58:59 MDT 2013
 #
-#<one line to give the program's name and a brief idea of what it does.>
+# Manages distribution of application to production server.
 #    Copyright (C) 2013  Andrew Nisbet
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #
 # Written by Andrew Nisbet at Edmonton Public Library
 # Rev: 
+#      0.1 - Removed get rule. 
 #      0.0 - Dev. 
 ####################################################
 # Change comment below for appropriate server.
@@ -33,8 +34,7 @@ LOCAL=~/projects/chargeitems/
 
 put: test
 	scp ${LOCAL}chargeitems.pl ${USER}@${SERVER}:${REMOTE}
-get:
-	scp ${USER}@${SERVER}:${REMOTE}chargeitems.pl 
+ 
 test:
 	perl -c chargeitems.pl
 

@@ -35,6 +35,9 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Jul 23 11:58:59 MDT 2013
 # Rev: 
+#          0.3 - Add lookup for required input so user doesn't have to 
+#                look up script's requirements. 
+#          0.2 - Added a TODO and a note on usage. 
 #          0.1 - Add switch to specify what to call, and where to  put the 
 #                output files. 
 #          0.0 - Dev. 
@@ -65,7 +68,7 @@ sub trim($)
 	return $string;
 }
 
-my $VERSION    = qq{0.1};
+my $VERSION    = qq{0.3};
 my $USER_ID    = "";
 my $TRX_NUM    = 1;
 my $API_LN_COUNT = 0;
@@ -84,11 +87,19 @@ sub usage()
 {
     print STDERR << "EOF";
 
-	usage: $0 [-u LCP-MISSING] [-o"./foo/bar/charge_items"] [-s'station'] [-Ux]
+	usage: $0 [-u LCP-MISSING] [-o"./foo/bar/charge_items"] [-s'station'] [-bUx]
 Usage notes for chargeitems.pl. $0 takes a list of barcodes
 on the command line and creates and runs API server commands
 to charge them to a given user, or system card.
 
+*** NOTE *** 
+If you just have bar codes you will need some additional informaiton like:
+   cat bar_codes.lst \| selitem -iB -oIB \| selcallnum -iK -oKSA \| $0 -u"ILS-DISCARD"
+Now you can just supply barcodes and let the script get the rest for you with
+   cat bar_codes.lst \| $0 -b -u"ILS-DISCARD"
+
+ -b        : Input is just barcodes, script has to do lookup itself
+               selitem -iB -oIB \| selcallnum -iK -oKSA .
  -o PATH   : File name of the output files '[TRX|TRSP]_charge_item.[log|lst] by default.
              'lst' file includes the transaction requests, 'log' includes transaction responses.
  -s STATION: Station library who performed this transaction (default EPLMNA).
@@ -97,7 +108,8 @@ to charge them to a given user, or system card.
  -x        : This (help) message.
 
 example: $0 -x
-example: cat LCP_Missing_items.lst | $0 -u LCP-MISSING -s"EPLMNA"
+example: cat LCP_Missing_items.lst | selitem -iB -oIB | selcallnum -iK -oKSA | $0 -u LCP-MISSING -s"EPLMNA"
+example: cat LCP_Missing_items.lst | $0 -u LCP-MISSING -s"EPLMNA" -b
 Version: $VERSION
 EOF
     exit;
@@ -108,7 +120,7 @@ EOF
 # return: 
 sub init
 {
-    my $opt_string = 'o:s:u:Ux';
+    my $opt_string = 'bo:s:u:Ux';
     getopts( "$opt_string", \%opt ) or usage();
     usage() if ( $opt{'x'} );
 	if ( !$opt{'u'} )
@@ -204,13 +216,24 @@ sub createTransactionLine
 init();
 
 # You can get the information for this script from just barcodes with 
+######## TODO Why doesn't this do this automatically!!! Thought the script was broken.
 # cat lcp_to_missing.lst | selitem -iB -oIB | selcallnum -iK -oKSA
 # Which produces:
 # 1100056|2|4|31221106795649  |VIDEO GAME 793.932  ANA|
 open API, ">$TRANSACTION_FILE" or die "Error opening '$TRANSACTION_FILE': $!\n";
 while ( <> )
 {
-	my ($catKey, $seqNum, $copyNum, $itemId, $callNum) = split( '\|', $_ );
+	my ($catKey, $seqNum, $copyNum, $itemId, $callNum);
+	if ( $opt{'b'} )
+	{
+		my $result = `echo "$_"  | selitem -iB -oIB | selcallnum -iK -oKSA 2>/dev/null`;
+		next unless ( defined( $result ) and length $result ); # don't continue if item throws an error 111.
+		($catKey, $seqNum, $copyNum, $itemId, $callNum) = split( '\|', $result );
+	}
+	else
+	{
+		($catKey, $seqNum, $copyNum, $itemId, $callNum) = split( '\|', $_ );
+	}
 	print "$catKey, $seqNum, $copyNum, $itemId, $callNum\n";
 	print API createTransactionLine($STATION, $itemId, $USER_ID, $callNum, $copyNum);
 }

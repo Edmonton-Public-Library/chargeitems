@@ -35,6 +35,7 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Jul 23 11:58:59 MDT 2013
 # Rev: 
+#          0.3.01 - Add charge override. 
 #          0.3 - Add lookup for required input so user doesn't have to 
 #                look up script's requirements. 
 #          0.2 - Added a TODO and a note on usage. 
@@ -68,7 +69,7 @@ sub trim($)
 	return $string;
 }
 
-my $VERSION    = qq{0.3};
+my $VERSION    = qq{0.3.01};
 my $USER_ID    = "";
 my $TRX_NUM    = 1;
 my $API_LN_COUNT = 0;
@@ -198,7 +199,8 @@ sub createTransactionLine
 	$transactionRequestLine .= 'rs'; #
 	$transactionRequestLine .= 'Y';
 	$transactionRequestLine .= '^';
-	$transactionRequestLine .= 'Oe'; #holds block override
+	# $transactionRequestLine .= 'Oe'; #holds block override
+	$transactionRequestLine .= 'OM'; # Master override
 	$transactionRequestLine .= 'Y';
 	$transactionRequestLine .= '^';
 	$transactionRequestLine .= 'Fv'; #Max length of transaction response

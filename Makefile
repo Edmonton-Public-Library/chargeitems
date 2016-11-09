@@ -27,12 +27,13 @@
 ####################################################
 # Change comment below for appropriate server.
 SERVER=eplapp.library.ualberta.ca
-# SERVER=edpl-t.library.ualberta.ca
+SERVER_TEST=edpl-t.library.ualberta.ca
 USER=sirsi
 REMOTE=~/Unicorn/Bincustom/
 LOCAL=~/projects/chargeitems/
 
 put: test
+	scp ${LOCAL}chargeitems.pl ${USER}@${SERVER_TEST}:${REMOTE}
 	scp ${LOCAL}chargeitems.pl ${USER}@${SERVER}:${REMOTE}
  
 test:

@@ -35,6 +35,7 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Jul 23 11:58:59 MDT 2013
 # Rev: 
+#          0.3.03 - Suppress spirious output from Symphony API selections. 
 #          0.3.02 - Fix input line too short error on each transaction. 
 #          0.3.01 - Add charge override. 
 #          0.3 - Add lookup for required input so user doesn't have to 
@@ -70,7 +71,7 @@ sub trim($)
 	return $string;
 }
 
-my $VERSION    = qq{0.3.02};
+my $VERSION    = qq{0.3.03};
 my $USER_ID    = "";
 my $TRX_NUM    = 1;
 my $API_LN_COUNT = 0;
@@ -229,7 +230,7 @@ while ( <> )
 	if ( $opt{'b'} )
 	{
         chomp;
-		my $result = `echo "$_"  | selitem -iB -oIB | selcallnum -iK -oKSA 2>/dev/null`;
+		my $result = `echo "$_"  | selitem -iB -oIB 2>/dev/null | selcallnum -iK -oKSA 2>/dev/null`;
 		next unless ( defined( $result ) and length $result ); # don't continue if item throws an error 111.
 		($catKey, $seqNum, $copyNum, $itemId, $callNum) = split( '\|', $result );
 	}

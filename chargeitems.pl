@@ -35,7 +35,7 @@
 # Author:  Andrew Nisbet, Edmonton Public Library
 # Created: Tue Jul 23 11:58:59 MDT 2013
 # Rev: 
-#          0.3.03 - Suppress spirious output from Symphony API selections. 
+#          0.3.03 - Suppress spirious output from Symphony API selections.
 #          0.3.02 - Fix input line too short error on each transaction. 
 #          0.3.01 - Add charge override. 
 #          0.3 - Add lookup for required input so user doesn't have to 
